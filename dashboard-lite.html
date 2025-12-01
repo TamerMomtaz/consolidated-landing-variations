@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RootRise — AI Infrastructure for SME Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* DEVONEERS Brand - Extracted from logo */
+            /* Deep Teal: #0f3a4a | Bronze: #c9a45c | Cyan accent: #4ecdc4 */
+            
+            /* Lighter Brushed Metallic Palette */
+            --teal-dark: #0d2f3d;
+            --teal-base: #134a5e;
+            --teal-mid: #1a5c73;
+            --teal-light: #237a96;
+            --teal-bright: #2d9ab8;
+            --teal-glow: rgba(45, 154, 184, 0.5);
+            
+            --bronze-dark: #8a7340;
+            --bronze-base: #c9a45c;
+            --bronze-light: #dbb86e;
+            --bronze-bright: #f0d08a;
+            --bronze-glow: rgba(201, 164, 92, 0.6);
+            
+            --cyan: #4ecdc4;
+            --cyan-light: #7ee8e1;
+            --cyan-muted: rgba(78, 205, 196, 0.2);
+            --cyan-glow: rgba(78, 205, 196, 0.5);
+            
+            /* LIGHTER Backgrounds - Brushed Metallic Teal */
+            --bg-deep: #0a2530;
+            --bg-primary: #0e3242;
+            --bg-secondary: #133f52;
+            --bg-tertiary: #184c63;
+            --bg-elevated: #1d5974;
+            --bg-highlight: #236685;
+            --bg-card: rgba(25, 75, 100, 0.5);
+            --bg-card-hover: rgba(35, 95, 125, 0.6);
+            --bg-glass: rgba(20, 65, 85, 0.4);
+            
+            /* Borders - More visible bronze */
+            --border-subtle: rgba(201, 164, 92, 0.2);
+            --border-medium: rgba(201, 164, 92, 0.35);
+            --border-strong: rgba(201, 164, 92, 0.5);
+            
+            /* Text - Warmer */
+            --text-primary: #f8f4eb;
+            --text-secondary: #d4cfc0;
+            --text-tertiary: #a8a090;
+            --text-muted: #787060;
+            
+            /* Status */
+            --status-active: #4ecdc4;
+            --status-active-muted: rgba(78, 205, 196, 0.18);
+            --status-success: #5dd39e;
+            --status-success-muted: rgba(93, 211, 158, 0.18);
+            --status-warning: #f0d08a;
+            --status-warning-muted: rgba(240, 208, 138, 0.18);
+        }
+
+        /* Theme: More Bronze */
+        .theme-bronze-heavy {
+            --bg-deep: #1a1408;
+            --bg-primary: #2a2010;
+            --bg-secondary: #352a16;
+            --bg-tertiary: #40341c;
+            --bg-elevated: #4b3e22;
+            --bg-card: rgba(60, 48, 30, 0.5);
+        }
+
+        /* Theme: Balanced */
+        .theme-balanced {
+            --bg-primary: #0f2a35;
+            --bg-secondary: #153545;
+            --bg-tertiary: #1b4055;
+        }
+
+        /* Theme: Cyan */
+        .theme-cyan {
+            --bronze-base: var(--cyan);
+            --bronze-light: var(--cyan-light);
+            --bronze-glow: var(--cyan-glow);
+        }
+
+        /* Theme: Electric */
+        .theme-electric {
+            --cyan: #00f5ff;
+            --cyan-glow: rgba(0, 245, 255, 0.6);
+            --status-active: #00f5ff;
+            --bg-primary: #081820;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Brushed Metal Background */
+        .bg-brushed {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201, 164, 92, 0.015) 2px, rgba(201, 164, 92, 0.015) 4px),
+                linear-gradient(135deg, rgba(201, 164, 92, 0.08) 0%, transparent 30%, rgba(78, 205, 196, 0.05) 50%, transparent 70%, rgba(201, 164, 92, 0.06) 100%);
+        }
+
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 0%, rgba(201, 164, 92, 0.15), transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(78, 205, 196, 0.1), transparent 50%);
+        }
+
+        .bg-circuit {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            background-image: 
+                linear-gradient(90deg, rgba(78, 205, 196, 0.06) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(78, 205, 196, 0.06) 1px, transparent 1px);
+            background-size: 100px 100px;
+            mask-image: radial-gradient(ellipse 70% 60% at 30% 30%, black 0%, transparent 70%);
+        }
+
+        /* Animations */
+        @keyframes pulse-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes rotate-border { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes data-stream { 0% { transform: translateX(-100%); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+        @keyframes glow-breathe { 0%, 100% { box-shadow: 0 0 25px var(--bronze-glow); } 50% { box-shadow: 0 0 45px var(--bronze-glow); } }
+        @keyframes text-shimmer { 0% { background-position: -100% 0; } 100% { background-position: 200% 0; } }
+
+        .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--bg-elevated), var(--bg-tertiary));
+            border: 1px solid var(--border-medium);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .theme-btn:hover { transform: scale(1.15) translateY(-3px); }
+        .theme-btn.active { border-color: var(--text-primary); box-shadow: 0 0 25px currentColor; }
+        .theme-btn.default { background: linear-gradient(135deg, #134a5e 50%, #c9a45c 50%); }
+        .theme-btn.bronze-heavy { background: linear-gradient(135deg, #c9a45c, #8a7340); }
+        .theme-btn.balanced { background: linear-gradient(135deg, #153545, #237a96); }
+        .theme-btn.cyan { background: linear-gradient(135deg, #4ecdc4, #2d9ab8); }
+        .theme-btn.electric { background: linear-gradient(135deg, #00f5ff, #081820); }
+        .theme-label { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; padding: 10px 6px; }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 32px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+            z-index: 100;
+            background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 30px rgba(0,0,0,0.3);
+        }
+        .nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--bronze-light), transparent); }
+        .nav::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--bronze-base), var(--cyan), var(--bronze-base), transparent); }
+        
+        .nav-brand { display: flex; align-items: center; gap: 16px; }
+        
+        .nav-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal-base), var(--teal-dark));
+            border: 3px solid var(--bronze-base);
+            box-shadow: 0 0 30px var(--bronze-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            animation: glow-breathe 4s infinite;
+        }
+        .nav-logo:hover { transform: scale(1.1) rotate(5deg); }
+        .nav-logo-inner { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--bronze-light); display: flex; align-items: center; justify-content: center; }
+        .nav-logo-eye { width: 12px; height: 8px; background: linear-gradient(135deg, var(--bronze-light), var(--bronze-base)); border-radius: 50%; position: relative; }
+        .nav-logo-eye::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: var(--teal-dark); border-radius: 50%; }
+        
+        .nav-title-group { display: flex; flex-direction: column; gap: 2px; }
+        .nav-title {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--bronze-light));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-shimmer 8s linear infinite;
+        }
+        .nav-subtitle { font-size: 11px; font-weight: 600; color: var(--cyan); letter-spacing: 0.1em; text-transform: uppercase; }
+        
+        .nav-links { display: flex; gap: 4px; background: var(--bg-card); padding: 5px; border-radius: 12px; border: 1px solid var(--border-subtle); }
+        .nav-link { background: transparent; border: none; color: var(--text-tertiary); padding: 10px 18px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 600; transition: all 0.3s ease; }
+        .nav-link:hover { color: var(--text-secondary); }
+        .nav-link.active { color: var(--bronze-light); background: linear-gradient(135deg, var(--bg-elevated), var(--bg-tertiary)); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, var(--bronze-base), var(--bronze-dark)); border: 2px solid var(--bronze-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--bg-primary); cursor: pointer; transition: all 0.4s ease; }
+        .nav-avatar:hover { transform: translateY(-4px); box-shadow: 0 8px 30px var(--bronze-glow); }
+
+        /* Layout */
+        .layout { display: flex; height: calc(100vh - 75px); position: relative; z-index: 1; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-subtle);
+            padding: 24px 16px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+        .sidebar::before { content: ''; position: absolute; top: 0; right: 0; width: 1px; height: 100%; background: linear-gradient(180deg, var(--bronze-base), var(--cyan), transparent); }
+        
+        .sidebar-label { font-size: 10px; font-weight: 800; color: var(--bronze-base); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+        .sidebar-label::before { content: ''; width: 8px; height: 8px; background: var(--bronze-base); border-radius: 2px; transform: rotate(45deg); }
+        .sidebar-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-medium), transparent); }
+        
+        .sme-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-radius: 14px; cursor: pointer; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); margin-bottom: 8px; border: 1px solid transparent; position: relative; overflow: hidden; }
+        .sme-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--bronze-base), var(--cyan)); transform: scaleY(0); transition: transform 0.3s ease; }
+        .sme-item:hover { background: var(--bg-card-hover); transform: translateX(8px); }
+        .sme-item:hover::before { transform: scaleY(1); }
+        .sme-item.active { background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated)); border-color: var(--border-medium); }
+        .sme-item.active::before { transform: scaleY(1); background: var(--cyan); }
+        
+        .sme-info { display: flex; flex-direction: column; gap: 5px; z-index: 1; }
+        .sme-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .sme-meta { font-size: 11px; color: var(--text-muted); }
+        .sme-status { width: 12px; height: 12px; border-radius: 50%; z-index: 1; }
+        .sme-status.live { background: var(--cyan); box-shadow: 0 0 20px var(--cyan-glow); animation: pulse-glow 2s infinite; }
+        .sme-status.complete { background: var(--status-success); box-shadow: 0 0 15px rgba(93, 211, 158, 0.5); }
+        .sme-status.pending { background: var(--text-muted); }
+
+        /* Main Content */
+        .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
+
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+        .header-content h1 {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--bronze-light) 50%, var(--text-primary) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-shimmer 6s linear infinite;
+        }
+        .header-meta { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--text-tertiary); }
+        .header-divider { width: 5px; height: 5px; background: var(--bronze-base); border-radius: 50%; box-shadow: 0 0 10px var(--bronze-glow); }
+        .live-indicator { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; background: linear-gradient(135deg, var(--status-active-muted), rgba(78, 205, 196, 0.08)); border: 1px solid rgba(78, 205, 196, 0.3); border-radius: 24px; font-size: 12px; font-weight: 700; color: var(--cyan); text-transform: uppercase; }
+        .live-dot { width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 15px var(--cyan-glow); animation: pulse-glow 1.5s infinite; }
+        
+        .header-actions { display: flex; gap: 14px; }
+        .btn { padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; gap: 10px; position: relative; overflow: hidden; }
+        .btn-ghost { background: var(--bg-card); border: 1px solid var(--border-medium); color: var(--text-secondary); }
+        .btn-ghost:hover { background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+        .btn-primary { background: linear-gradient(135deg, var(--bronze-light), var(--bronze-base), var(--bronze-dark)); border: 1px solid var(--bronze-bright); color: var(--bg-deep); box-shadow: 0 6px 25px var(--bronze-glow); }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 40px var(--bronze-glow); }
+        .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 3s infinite; }
+
+        /* Metrics */
+        .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+        .metric { background: linear-gradient(135deg, var(--bg-glass), var(--bg-card)); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 24px; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+        .metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--bronze-base), transparent); opacity: 0; transition: opacity 0.3s; }
+        .metric::after { content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px; background: linear-gradient(90deg, var(--bronze-base), var(--cyan)); transition: all 0.4s; transform: translateX(-50%); }
+        .metric:hover { border-color: var(--border-medium); transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 60px rgba(0,0,0,0.35), 0 0 40px var(--bronze-glow); }
+        .metric:hover::before { opacity: 1; }
+        .metric:hover::after { width: 70%; }
+        .metric-label { font-size: 11px; font-weight: 800; color: var(--bronze-base); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+        .metric-value { display: flex; align-items: baseline; gap: 6px; }
+        .metric-number { font-size: 40px; font-weight: 800; background: linear-gradient(180deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .metric-unit { font-size: 18px; color: var(--text-tertiary); font-weight: 600; }
+        .metric-change { font-size: 12px; margin-top: 14px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .metric-change.positive { color: var(--status-success); }
+        .metric-change.neutral { color: var(--text-tertiary); }
+
+        /* Intelligence Panel */
+        .intelligence { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 28px; margin-bottom: 28px; position: relative; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.25); }
+        .intelligence::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--bronze-base), var(--cyan), var(--bronze-base), transparent); }
+        .intelligence::after { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, var(--cyan-muted) 0%, transparent 50%); pointer-events: none; }
+        
+        .intelligence-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; position: relative; z-index: 1; }
+        .intelligence-title { display: flex; align-items: center; gap: 18px; }
+        .intelligence-icon { width: 54px; height: 54px; background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-elevated)); border: 2px solid var(--border-medium); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px var(--bronze-glow); animation: glow-breathe 4s infinite; }
+        .intelligence-icon svg { width: 26px; height: 26px; stroke: var(--bronze-light); }
+        .intelligence-title h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+        .intelligence-title p { font-size: 14px; color: var(--text-tertiary); margin-top: 4px; }
+        .intelligence-stats { display: flex; gap: 14px; z-index: 1; }
+        .stat-badge { padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-secondary); display: flex; align-items: center; gap: 10px; transition: all 0.3s; }
+        .stat-badge:hover { transform: translateY(-3px); }
+        .stat-badge svg { width: 16px; height: 16px; stroke: var(--bronze-base); }
+
+        /* Agent Grid */
+        .agents { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 28px; z-index: 1; }
+        .agent { background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary)); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 22px 16px; text-align: center; cursor: pointer; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+        .agent::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--bronze-glow), transparent); opacity: 0; transition: opacity 0.3s; }
+        .agent:hover { border-color: var(--border-medium); transform: translateY(-10px) scale(1.05); box-shadow: 0 25px 60px rgba(0,0,0,0.35); }
+        .agent:hover::before { opacity: 0.15; }
+        .agent.active { border-color: var(--bronze-base); box-shadow: 0 0 50px var(--bronze-glow); }
+        .agent.working { animation: float 3s ease-in-out infinite; }
+        
+        /* ROTATING NEON BORDER */
+        .agent.working::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 21px;
+            background: conic-gradient(from 0deg, var(--cyan), var(--bronze-base), var(--cyan-light), var(--bronze-light), var(--cyan));
+            animation: rotate-border 2.5s linear infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 3px;
+            filter: blur(1px);
+        }
+        
+        .agent-icon { width: 54px; height: 54px; margin: 0 auto 16px; background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-elevated)); border: 1px solid var(--border-subtle); border-radius: 16px; display: flex; align-items: center; justify-content: center; z-index: 1; transition: all 0.4s; }
+        .agent:hover .agent-icon { border-color: var(--bronze-base); box-shadow: 0 0 30px var(--bronze-glow); transform: scale(1.15); }
+        .agent-icon svg { width: 24px; height: 24px; stroke: var(--text-tertiary); transition: all 0.3s; }
+        .agent:hover .agent-icon svg, .agent.active .agent-icon svg, .agent.working .agent-icon svg { stroke: var(--bronze-light); }
+        .agent.complete .agent-icon { background: linear-gradient(135deg, var(--status-success-muted), rgba(93, 211, 158, 0.08)); border-color: rgba(93, 211, 158, 0.4); }
+        .agent.complete .agent-icon svg { stroke: var(--status-success); }
+        
+        .agent-name { font-size: 13px; font-weight: 800; color: var(--text-secondary); margin-bottom: 12px; z-index: 1; transition: color 0.3s; }
+        .agent:hover .agent-name, .agent.active .agent-name { color: var(--text-primary); }
+        
+        .agent-status { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; padding: 6px 14px; border-radius: 8px; z-index: 1; text-transform: uppercase; letter-spacing: 0.08em; }
+        .agent-status.complete { background: var(--status-success-muted); color: var(--status-success); }
+        .agent-status.working { background: var(--status-active-muted); color: var(--cyan); }
+        .agent-status.queued { background: rgba(120, 112, 96, 0.15); color: var(--text-muted); }
+        .agent-status.monitoring { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+        .agent-status.standby { background: var(--status-warning-muted); color: var(--bronze-light); }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px currentColor; animation: pulse-glow 1.5s infinite; }
+
+        /* Agent Detail */
+        .agent-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary)); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 24px; z-index: 1; }
+        .detail-header { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+        .detail-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--status-active-muted), rgba(78, 205, 196, 0.08)); border: 2px solid rgba(78, 205, 196, 0.3); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px var(--cyan-glow); }
+        .detail-icon svg { width: 28px; height: 28px; stroke: var(--cyan); }
+        .detail-name { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+        .detail-status { font-size: 14px; color: var(--cyan); display: flex; align-items: center; gap: 8px; margin-top: 4px; font-weight: 600; }
+        
+        .thinking-box { background: linear-gradient(135deg, var(--status-active-muted), rgba(78, 205, 196, 0.05)); border: 1px solid rgba(78, 205, 196, 0.25); border-radius: 16px; padding: 20px; font-size: 14px; line-height: 1.7; color: var(--text-secondary); position: relative; overflow: hidden; }
+        .thinking-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); animation: data-stream 2s infinite; }
+        .thinking-label { font-size: 10px; font-weight: 900; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+        .thinking-label::before { content: ''; width: 10px; height: 10px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 15px var(--cyan-glow); animation: pulse-glow 1.5s infinite; }
+
+        /* Activity */
+        .activity-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .activity-label { font-size: 10px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; }
+        .activity-list { display: flex; flex-direction: column; }
+        .activity-item { display: grid; grid-template-columns: 44px 90px 1fr; gap: 12px; padding: 12px 0; font-size: 12px; border-bottom: 1px solid var(--border-subtle); transition: all 0.2s; }
+        .activity-item:hover { background: var(--bg-card); margin: 0 -14px; padding: 12px 14px; border-radius: 10px; border-bottom-color: transparent; }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-time { font-family: 'SF Mono', monospace; font-size: 11px; color: var(--text-muted); }
+        .activity-agent { font-weight: 800; font-size: 11px; }
+        .activity-agent.ai { color: var(--cyan); }
+        .activity-agent.complete { color: var(--status-success); }
+        .activity-agent.system { color: var(--bronze-base); }
+        .activity-action { color: var(--text-tertiary); }
+
+        /* Journey */
+        .journey { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 28px; position: relative; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.2); }
+        .journey::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--status-success), var(--cyan), transparent); }
+        .journey-header { font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
+        .journey-header svg { width: 22px; height: 22px; stroke: var(--bronze-base); }
+        .journey-track { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 35px; }
+        .journey-line { position: absolute; top: 26px; left: 85px; right: 85px; height: 5px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+        .journey-progress { height: 100%; background: linear-gradient(90deg, var(--status-success), var(--cyan)); border-radius: 3px; transition: width 2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 20px var(--cyan-glow); position: relative; }
+        .journey-progress::after { content: ''; position: absolute; right: -7px; top: -5px; width: 14px; height: 14px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 25px var(--cyan-glow); animation: pulse-glow 1.5s infinite; }
+        .journey-step { display: flex; flex-direction: column; align-items: center; gap: 16px; z-index: 1; }
+        .step-icon { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; transition: all 0.5s; }
+        .step-icon.complete { background: linear-gradient(135deg, var(--status-success), #3dbe8a); color: white; box-shadow: 0 0 30px rgba(93, 211, 158, 0.5); }
+        .step-icon.active { background: linear-gradient(135deg, var(--cyan), #3dbead); color: white; box-shadow: 0 0 0 6px var(--status-active-muted), 0 0 40px var(--cyan-glow); animation: glow-breathe 2s infinite; }
+        .step-icon.pending { background: var(--bg-tertiary); border: 3px solid var(--border-medium); color: var(--text-muted); }
+        .step-label { font-size: 13px; font-weight: 700; }
+        .step-label.complete { color: var(--status-success); }
+        .step-label.active { color: var(--cyan); }
+        .step-label.pending { color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="bg-brushed"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-circuit"></div>
+
+    <div class="theme-switcher">
+        <span class="theme-label">Theme</span>
+        <button class="theme-btn default active" onclick="setTheme('')" title="Teal & Bronze"></button>
+        <button class="theme-btn bronze-heavy" onclick="setTheme('theme-bronze-heavy')" title="Bronze Heavy"></button>
+        <button class="theme-btn balanced" onclick="setTheme('theme-balanced')" title="Balanced"></button>
+        <button class="theme-btn cyan" onclick="setTheme('theme-cyan')" title="Cyan"></button>
+        <button class="theme-btn electric" onclick="setTheme('theme-electric')" title="Electric"></button>
+    </div>
+
+    <nav class="nav">
+        <div class="nav-brand">
+            <div class="nav-logo">
+                <div class="nav-logo-inner">
+                    <div class="nav-logo-eye"></div>
+                </div>
+            </div>
+            <div class="nav-title-group">
+                <span class="nav-title">RootRise</span>
+                <span class="nav-subtitle">by DEVONEERS</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="nav-links">
+                <button class="nav-link">Overview</button>
+                <button class="nav-link active">Portfolio</button>
+                <button class="nav-link">Analytics</button>
+                <button class="nav-link">Reports</button>
+            </div>
+            <div class="nav-avatar">AF</div>
+        </div>
+    </nav>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-label">Your Portfolio</div>
+            <div class="sme-item active animate-fade-up">
+                <div class="sme-info">
+                    <span class="sme-name">Natura Foods</span>
+                    <span class="sme-meta">Food Processing • Alexandria</span>
+                </div>
+                <div class="sme-status live"></div>
+            </div>
+            <div class="sme-item animate-fade-up animate-delay-1">
+                <div class="sme-info">
+                    <span class="sme-name">OliveHill</span>
+                    <span class="sme-meta">Food Processing • Cairo</span>
+                </div>
+                <div class="sme-status complete"></div>
+            </div>
+            <div class="sme-item animate-fade-up animate-delay-2">
+                <div class="sme-info">
+                    <span class="sme-name">PrimeOlive</span>
+                    <span class="sme-meta">Food Processing • Giza</span>
+                </div>
+                <div class="sme-status pending"></div>
+            </div>
+            <div class="sme-item animate-fade-up animate-delay-3">
+                <div class="sme-info">
+                    <span class="sme-name">Al Khairat</span>
+                    <span class="sme-meta">Manufacturing • Cairo</span>
+                </div>
+                <div class="sme-status pending"></div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="header animate-fade-up">
+                <div class="header-content">
+                    <h1>Natura Foods Processing Co.</h1>
+                    <div class="header-meta">
+                        <span>Alexandria, Egypt</span>
+                        <div class="header-divider"></div>
+                        <span>47 employees</span>
+                        <div class="header-divider"></div>
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            Analysis Active
+                        </span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-ghost">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Reports
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Generate Plan
+                    </button>
+                </div>
+            </header>
+
+            <section class="metrics animate-fade-up animate-delay-1">
+                <div class="metric">
+                    <div class="metric-label">Diagnostic Score</div>
+                    <div class="metric-value">
+                        <span class="metric-number" id="score">0</span>
+                        <span class="metric-unit">/100</span>
+                    </div>
+                    <div class="metric-change positive">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                        +12 vs sector avg
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Export Readiness</div>
+                    <div class="metric-value">
+                        <span class="metric-number" id="export">0</span>
+                        <span class="metric-unit">%</span>
+                    </div>
+                    <div class="metric-change positive">High potential</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Investment Ready</div>
+                    <div class="metric-value">
+                        <span class="metric-number" id="invest">0</span>
+                        <span class="metric-unit">/5</span>
+                    </div>
+                    <div class="metric-change neutral">Needs attention</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Growth Potential</div>
+                    <div class="metric-value">
+                        <span class="metric-number" id="grade">-</span>
+                    </div>
+                    <div class="metric-change positive">Top 15% cohort</div>
+                </div>
+            </section>
+
+            <section class="intelligence animate-fade-up animate-delay-2">
+                <div class="intelligence-header">
+                    <div class="intelligence-title">
+                        <div class="intelligence-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+                        </div>
+                        <div>
+                            <h2>Intelligence Layer</h2>
+                            <p>6 specialized agents analyzing diagnostic data</p>
+                        </div>
+                    </div>
+                    <div class="intelligence-stats">
+                        <div class="stat-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span id="elapsed">0:00</span> elapsed
+                        </div>
+                        <div class="stat-badge"><span id="completion">0</span>% complete</div>
+                    </div>
+                </div>
+
+                <div class="agents">
+                    <div class="agent complete">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                        <div class="agent-name">Diagnostics</div>
+                        <span class="agent-status complete">Complete</span>
+                    </div>
+                    <div class="agent active working">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                        <div class="agent-name">Growth</div>
+                        <span class="agent-status working"><span class="status-dot"></span>Analyzing</span>
+                    </div>
+                    <div class="agent">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+                        <div class="agent-name">Export</div>
+                        <span class="agent-status queued">Queued</span>
+                    </div>
+                    <div class="agent">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                        <div class="agent-name">Investment</div>
+                        <span class="agent-status queued">Queued</span>
+                    </div>
+                    <div class="agent">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div>
+                        <div class="agent-name">Context</div>
+                        <span class="agent-status monitoring">Active</span>
+                    </div>
+                    <div class="agent">
+                        <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                        <div class="agent-name">Validator</div>
+                        <span class="agent-status standby">Standby</span>
+                    </div>
+                </div>
+
+                <div class="agent-detail">
+                    <div>
+                        <div class="detail-header">
+                            <div class="detail-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                            <div>
+                                <div class="detail-name">Growth Strategy Agent</div>
+                                <div class="detail-status"><span class="status-dot"></span>Analyzing<span id="dots"></span></div>
+                            </div>
+                        </div>
+                        <div class="thinking-box">
+                            <div class="thinking-label">Processing</div>
+                            <span id="thinking-text">Identifying 3 high-impact interventions for Q1. Cross-referencing operational gaps with 23 similar food processing SMEs in Egypt to validate recommendations</span><span id="dots2"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="activity-header">
+                            <span class="live-dot"></span>
+                            <span class="activity-label">Live Activity</span>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item"><span class="activity-time">0:42</span><span class="activity-agent ai">Growth</span><span class="activity-action">Cross-referencing 23 similar SMEs</span></div>
+                            <div class="activity-item"><span class="activity-time">0:38</span><span class="activity-agent ai">Growth</span><span class="activity-action">3 quick wins identified</span></div>
+                            <div class="activity-item"><span class="activity-time">0:31</span><span class="activity-agent ai">Context</span><span class="activity-action">Ramadan seasonality applied</span></div>
+                            <div class="activity-item"><span class="activity-time">0:24</span><span class="activity-agent complete">Diagnostics</span><span class="activity-action">47 insights extracted</span></div>
+                            <div class="activity-item"><span class="activity-time">0:12</span><span class="activity-agent system">System</span><span class="activity-action">Dr. Ahmed notified</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="journey animate-fade-up animate-delay-3">
+                <h3 class="journey-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                    Transformation Journey
+                </h3>
+                <div class="journey-track">
+                    <div class="journey-line"><div class="journey-progress" id="journeyProgress" style="width: 0%"></div></div>
+                    <div class="journey-step"><div class="step-icon complete">✓</div><span class="step-label complete">Diagnostic</span></div>
+                    <div class="journey-step"><div class="step-icon active">2</div><span class="step-label active">Analysis</span></div>
+                    <div class="journey-step"><div class="step-icon pending">3</div><span class="step-label pending">Planning</span></div>
+                    <div class="journey-step"><div class="step-icon pending">4</div><span class="step-label pending">Validation</span></div>
+                    <div class="journey-step"><div class="step-icon pending">5</div><span class="step-label pending">Delivery</span></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            document.body.className = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        let dots = '';
+        setInterval(() => {
+            dots = dots.length >= 3 ? '' : dots + '.';
+            document.getElementById('dots').textContent = dots;
+            document.getElementById('dots2').textContent = dots;
+        }, 350);
+
+        function animateCounter(id, target, duration = 2000) {
+            const el = document.getElementById(id);
+            const increment = target / (duration / 16);
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) { current = target; clearInterval(timer); }
+                el.textContent = typeof target === 'number' && target % 1 !== 0 ? current.toFixed(1) : Math.floor(current);
+            }, 16);
+        }
+
+        setTimeout(() => {
+            document.getElementById('journeyProgress').style.width = '35%';
+            animateCounter('score', 67);
+            animateCounter('export', 34);
+            animateCounter('invest', 2.4);
+            animateCounter('completion', 68);
+            setTimeout(() => { document.getElementById('grade').textContent = 'A-'; }, 1500);
+        }, 800);
+
+        let seconds = 154;
+        setInterval(() => {
+            seconds++;
+            document.getElementById('elapsed').textContent = `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+        }, 1000);
+
+        const thinkingTexts = [
+            "Identifying 3 high-impact interventions for Q1. Cross-referencing operational gaps with 23 similar food processing SMEs in Egypt to validate recommendations",
+            "Analyzing production capacity utilization patterns. Benchmarking against regional competitors to identify efficiency improvements",
+            "Evaluating export documentation readiness. Mapping compliance gaps against EU food safety requirements"
+        ];
+        let textIndex = 0;
+        setInterval(() => {
+            textIndex = (textIndex + 1) % thinkingTexts.length;
+            const el = document.getElementById('thinking-text');
+            el.style.opacity = 0;
+            setTimeout(() => { el.textContent = thinkingTexts[textIndex]; el.style.opacity = 1; }, 300);
+        }, 8000);
+    </script>
+</body>
+</html>
